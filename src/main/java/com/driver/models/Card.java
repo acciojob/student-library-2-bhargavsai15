@@ -1,6 +1,9 @@
 package com.driver.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -9,6 +12,10 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
+@Table(name = "Card")
+@Builder
+@AllArgsConstructor
+@Data
 public class Card {
 
     @Id
@@ -27,6 +34,7 @@ public class Card {
 
     @Enumerated(value = EnumType.STRING)
     private CardStatus cardStatus;
+
 
     @OneToMany(mappedBy = "card", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("card")

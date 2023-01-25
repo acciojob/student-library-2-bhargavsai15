@@ -1,7 +1,6 @@
 package com.driver.services;
 
-import com.driver.models.Transaction;
-import com.driver.models.TransactionStatus;
+import com.driver.models.*;
 import com.driver.repositories.BookRepository;
 import com.driver.repositories.CardRepository;
 import com.driver.repositories.TransactionRepository;
@@ -45,7 +44,45 @@ public class TransactionService {
 
         //Note that the error message should match exactly in all cases
 
-       return null; //return transactionId instead
+        Card card=cardRepository5.findById(cardId).get();
+        Book book=bookRepository5.findById(bookId).get();
+
+        if(!book.isAvailable()==true){
+            throw new Exception("Book is either unavailable or not presen");
+        }
+        if(!(CardStatus.ACTIVATED ==card.getCardStatus())){
+            throw new Exception("Card is invalid");
+        }
+
+        List<Book> books=card.getBooks();
+
+        if(books.size()>=3){
+            throw new Exception("Book limit has reached for this card");
+        }
+
+        List<Transaction> transactionList=book.getTransactions();
+
+        Transaction transaction = new Transaction();
+
+        transaction.setCard(card);
+        transaction.setBook(book);
+        transaction.setIssueOperation(true);
+        transaction.setTransactionStatus(TransactionStatus.SUCCESSFUL);
+        transaction.setFineAmount(0);
+
+
+        //Setting in bookRepo
+        transactionList.add(transaction);
+        book.setTransactions(transactionList);
+        //setting bookslist in card repo
+        books.add(book);
+        card.setBooks(books);
+        book.setCard(card);
+
+        cardRepository5.save(card);
+
+
+       return transaction.getTransactionId(); //return transactionId instead
     }
 
     public Transaction returnBook(int cardId, int bookId) throws Exception{

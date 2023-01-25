@@ -1,6 +1,9 @@
 package com.driver.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -8,6 +11,9 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@Table(name="Student")
+@Data
+@AllArgsConstructor
 public class Student {
 
     @Id
@@ -16,7 +22,9 @@ public class Student {
 
     @Column(unique = true)
     private String emailId;
+
     private String name;
+
     private int age; // in case we want to check on the basis of age while issuing
 
     private String country;
